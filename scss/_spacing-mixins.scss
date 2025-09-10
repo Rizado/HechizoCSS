@@ -1,0 +1,56 @@
+@import "config";
+
+$spacers: (
+        0: 0,
+        1: 0.25rem,
+        2: 0.5rem,
+        3: 0.75rem,
+        4: 1rem,
+        5: 1.5rem,
+        6: 2rem,
+        7: 2.5rem,
+        8: 3rem,
+        9: 4rem
+);
+
+$sides: (
+        "":        (margin, padding),
+        "-t":      (margin-top, padding-top),
+        "-b":      (margin-bottom, padding-bottom),
+        "-l":      (margin-left, padding-left),
+        "-r":      (margin-right, padding-right),
+        "-s":      (margin-left, padding-left),
+        "-e":      (margin-right, padding-right),
+        "-x":      (margin-left margin-right, padding-left padding-right),
+        "-y":      (margin-top margin-bottom, padding-top padding-bottom)
+);
+
+// === Генерация базовых классов ===
+@mixin spacing-base {
+  @each $size, $value in $spacers {
+    @each $suffix, $props in $sides {
+      .m#{$suffix}-#{$size} {
+        @each $prop in nth($props, 1) { #{$prop}: $value; }
+      }
+      .p#{$suffix}-#{$size} {
+        @each $prop in nth($props, 2) { #{$prop}: $value; }
+      }
+    }
+  }
+}
+
+// === Генерация для одного брейкпоинта ===
+@mixin generate-spacing-for-breakpoint($bp) {
+  @media (min-width: var(--breakpoint-#{$bp})) {
+    @each $size, $value in $spacers {
+      @each $suffix, $props in $sides {
+        .m-#{$bp}#{$suffix}-#{$size} {
+          @each $prop in nth($props, 1) { #{$prop}: $value; }
+        }
+        .p-#{$bp}#{$suffix}-#{$size} {
+          @each $prop in nth($props, 2) { #{$prop}: $value; }
+        }
+      }
+    }
+  }
+}

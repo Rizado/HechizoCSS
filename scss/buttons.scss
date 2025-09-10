@@ -1,0 +1,52 @@
+@import "./buttons-mixins";
+
+// Генерация кнопок для основных цветов
+$button-colors: primary, secondary, success, warning, error, info, neutral;
+
+@each $color in $button-colors {
+  // Solid кнопки
+  .btn-solid-#{$color} {
+    @extend .btn-solid;
+    background-color: var(--color-#{$color}-500);
+    color: #ffffff; // Белый текст для всех solid-кнопок
+    border-color: var(--color-#{$color}-500);
+
+    &:hover {
+      background-color: var(--color-#{$color}-600);
+      border-color: var(--color-#{$color}-600);
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-#{$color}-300);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  // Outline кнопки
+  .btn-outline-#{$color} {
+    @extend .btn-outline;
+    color: var(--color-#{$color}-500);
+    border-color: var(--color-#{$color}-500);
+
+    &:hover {
+      background-color: var(--color-#{$color}-50); // ← Используем оттенок 50 как hover-фон
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-#{$color}-300);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      border-color: #ccc;
+      color: #999;
+    }
+  }
+}

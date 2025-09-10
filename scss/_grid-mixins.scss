@@ -1,0 +1,165 @@
+@import "variables";
+
+// === Вспомогательные функции ===
+@function str-replace($string, $search, $replace: "") {
+  $index: str-index($string, $search);
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+           str-slice($string, $index + str-length($search));
+  }
+  @return $string;
+}
+
+@function strip-c-prefix($str) {
+  @if str-index($str, "c-offset-") == 1 {
+    @return str-slice($str, 9);
+  }
+  @else if str-index($str, "c-") == 1 {
+    @return str-slice($str, 3);
+  }
+  @return $str;
+}
+
+// === Настройки ===
+$widths: (
+                (c-w-100): 100%,
+                (c-w-83, c-5-6): 83.3333%,
+                (c-w-75, c-3-4): 75%,
+                (c-w-80, c-4-5): 80%,
+                (c-w-67, c-2-3, c-4-6): 66.6667%,
+                (c-w-60, c-3-5): 60%,
+                (c-w-50, c-1-2, c-2-4, c-3-6): 50%,
+                (c-w-40, c-2-5): 40%,
+                (c-w-33, c-1-3, c-2-6): 33.3333%,
+                (c-w-25, c-1-4): 25%,
+                (c-w-20, c-1-5): 20%,
+                (c-w-16, c-1-6): 16.6667%,
+);
+
+// === Базовые стили ===
+@mixin grid-base {
+  :root {
+    --gap-x: 24px;
+  }
+
+  .container,
+  .container-fluid {
+    width: 100%;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    align-items: center;
+  }
+
+  // Контейнеры до lg
+  @each $bp, $width in $containers {
+    $bp-value: map-get($breakpoints, $bp);
+    @media (min-width: #{$bp-value}) {
+      .container {
+        max-width: #{$width};
+      }
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    margin-left: calc(-1 * var(--gap-x) / 2);
+    margin-right: calc(-1 * var(--gap-x) / 2);
+  }
+
+  .c {
+    flex: 1 1 0%;
+    padding: 0 calc(var(--gap-x) / 2);
+    box-sizing: border-box;
+  }
+
+  .c-auto {
+    flex: 0 0 auto;
+  }
+
+  // Универсальные ширины — объединяем селекторы
+  @each $classes, $width in $widths {
+    $selector: "";
+    @each $class in $classes {
+      $selector: if($selector == "", ".#{$class}", $selector + ", .#{$class}");
+    }
+    #{$selector} {
+      flex: 0 0 #{$width};
+    }
+  }
+
+  // Универсальные offset — объединяем селекторы
+  @each $classes, $width in $widths {
+    $selector: "";
+    @each $class in $classes {
+      $offset-class: str-replace($class, 'c-', 'c-offset-');
+      $selector: if($selector == "", ".#{$offset-class}", $selector + ", .#{$offset-class}");
+    }
+    #{$selector} {
+      margin-left: #{$width};
+    }
+  }
+
+  // Утилиты
+  .no-gutters {
+    margin-left: 0; margin-right: 0;
+    > .c, > [class^="c-"] { padding-left: 0; padding-right: 0; }
+  }
+
+  .align-start   { align-items: flex-start; }
+  .align-center  { align-items: center; }
+  .align-end     { align-items: flex-end; }
+
+  .justify-start   { justify-content: flex-start; }
+  .justify-center  { justify-content: center; }
+  .justify-end     { justify-content: flex-end; }
+  .justify-between { justify-content: space-between; }
+  .justify-around  { justify-content: space-around; }
+
+  .order-first { order: -1; }
+  .order-last  { order: 999; }
+  @for $i from 0 through 6 { .order-#{$i} { order: #{$i}; } }
+}
+
+// === Миксин: генерация адаптивных классов для одного брейкпоинта ===
+@mixin generate-grid-for-breakpoint($bp) {
+  @media (min-width: var(--breakpoint-#{$bp})) {
+    // Ширины
+    @each $classes, $width in $widths {
+      $selector: "";
+      @each $class in $classes {
+        $clean-class: strip-c-prefix($class);
+        $full-class: ".c-#{$bp}-#{$clean-class}";
+        $selector: if($selector == "", $full-class, $selector + ", " + $full-class);
+      }
+      #{$selector} {
+        flex: 0 0 #{$width};
+      }
+    }
+
+    // Offset
+    @each $classes, $width in $widths {
+      $selector: "";
+      @each $class in $classes {
+        $clean-class: strip-c-prefix($class);
+        $offset-class: str-replace($class, 'c-', 'c-offset-');
+        $clean-offset: strip-c-prefix($offset-class);
+        $full-class: ".c-#{$bp}-offset-#{$clean-offset}";
+        $selector: if($selector == "", $full-class, $selector + ", " + $full-class);
+      }
+      #{$selector} {
+        margin-left: #{$width};
+      }
+    }
+
+    // Order
+    @for $i from 0 through 6 {
+      .order-#{$bp}-#{$i} { order: #{$i}; }
+    }
+    .order-#{$bp}-first { order: -1; }
+    .order-#{$bp}-last  { order: 999; }
+  }
+}

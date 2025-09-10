@@ -1,0 +1,31 @@
+@import "config";
+@import "variables";
+
+// === Утилиты ширины: w-5, w-10, ..., w-100 ===
+@for $i from 1 through 20 {
+  $width: $i * 5;
+  $widthp: $width + "%";
+  .w-#{$width} {
+    width: #{$widthp} !important;
+  }
+}
+
+// === Утилиты отображения ===
+$displays: block, inline, inline-block, flex, inline-flex, grid, inline-grid, table, table-row, table-cell, none;
+
+@each $display in $displays {
+  .d-#{$display} {
+    display: #{$display} !important;
+  }
+}
+
+// === Адаптивные утилиты отображения ===
+@each $bp, $value in $breakpoints {
+  @each $display in $displays {
+    @media (min-width: #{$value}) {
+      .d-#{$bp}-#{$display} {
+        display: #{$display} !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+@import "colors-mixins";
+
+// === Генерация CSS-переменных и классов ===
+:root {
+  @each $color-name, $shades in $colors {
+    @each $shade, $hex in $shades {
+      --color-#{$color-name}-#{$shade}: #{$hex};
+    }
+  }
+}
+
+// === Тёмная тема: инвертируем оттенки ===
+@media (prefers-color-scheme: dark) {
+  :root {
+    @each $color-name, $shades in $colors {
+      --color-#{$color-name}-50: #{map-get($shades, 900)};
+      --color-#{$color-name}-100: #{map-get($shades, 800)};
+      --color-#{$color-name}-200: #{map-get($shades, 700)};
+      --color-#{$color-name}-300: #{map-get($shades, 600)};
+      --color-#{$color-name}-400: #{map-get($shades, 500)};
+      --color-#{$color-name}-500: #{map-get($shades, 500)}; // базовый — оставляем
+      --color-#{$color-name}-600: #{map-get($shades, 400)};
+      --color-#{$color-name}-700: #{map-get($shades, 300)};
+      --color-#{$color-name}-800: #{map-get($shades, 200)};
+      --color-#{$color-name}-900: #{map-get($shades, 100)};
+    }
+  }
+}
+
+// === Утилиты: фон, текст, бордер ===
+@each $color-name, $shades in $colors {
+  @each $shade, $hex in $shades {
+    .bg-#{$color-name}-#{$shade} {
+      background-color: var(--color-#{$color-name}-#{$shade}) !important;
+    }
+    .text-#{$color-name}-#{$shade} {
+      color: var(--color-#{$color-name}-#{$shade}) !important;
+    }
+    .border-#{$color-name}-#{$shade} {
+      border-color: var(--color-#{$color-name}-#{$shade}) !important;
+    }
+  }
+}

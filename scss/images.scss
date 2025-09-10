@@ -1,0 +1,66 @@
+// === Настройки эффектов ===
+:root {
+  --hover-scale: 1.1;
+  --hover-saturation: 0.7;
+  --hover-rotate: 3deg;
+  --img-transition-duration: 1s;
+}
+
+// === Контейнеры для изображений с фиксированным соотношением сторон ===
+$img-ratios: (
+        "1_1": 1/1,
+        "1_2": 1/2,
+        "2_1": 2/1,
+        "2_3": 2/3,
+        "3_2": 3/2,
+        "3_4": 3/4,
+        "4_3": 4/3,
+        "9_16": 9/16,
+        "16_9": 16/9
+);
+
+@each $name, $ratio in $img-ratios {
+  .img_#{$name} {
+    position: relative;
+    width: 100%;
+    aspect-ratio: $ratio;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition-duration: 1s;
+      &:hover {
+        transition-duration: 1s;
+      }
+    }
+  }
+}
+
+// === Эффекты при наведении (с transition) ===
+
+.img_hover_scale {
+  //transition: transform var(--img-transition-duration) ease;
+}
+.img_hover_scale:hover {
+  transform: scale(var(--hover-scale));
+}
+
+.img_hover_saturation {
+  //transition: filter var(--img-transition-duration) ease;
+}
+.img_hover_saturation:hover {
+  filter: saturate(var(--hover-saturation));
+}
+
+.img_hover_rotate {
+  //transition: transform var(--img-transition-duration) ease;
+}
+.img_hover_rotate:hover {
+  transform: rotate(var(--hover-rotate));
+}

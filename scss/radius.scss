@@ -1,0 +1,32 @@
+// === Значения радиусов (взяты из spacing) ===
+$radiuses: (
+        0: 0,
+        1: 0.25rem,
+        2: 0.5rem,
+        3: 0.75rem,
+        4: 1rem,
+        5: 1.5rem
+);
+
+// === Генерация утилит радиусов ===
+@each $size, $value in $radiuses {
+
+  // Все углы
+  .r-#{$size} {
+    border-radius: $value !important;
+  }
+
+  // Индивидуальные углы
+  .r-tl-#{$size} { border-top-left-radius: $value !important; }
+  .r-tr-#{$size} { border-top-right-radius: $value !important; }
+  .r-bl-#{$size} { border-bottom-left-radius: $value !important; }
+  .r-br-#{$size} { border-bottom-right-radius: $value !important; }
+
+  // Стороны (top, bottom, left, right)
+  .r-t-#{$size}  { border-top-left-radius: $value !important; border-top-right-radius: $value !important; }
+  .r-b-#{$size}  { border-bottom-left-radius: $value !important; border-bottom-right-radius: $value !important; }
+  .r-l-#{$size},
+  .r-s-#{$size}  { border-top-left-radius: $value !important; border-bottom-left-radius: $value !important; }
+  .r-r-#{$size},
+  .r-e-#{$size}  { border-top-right-radius: $value !important; border-bottom-right-radius: $value !important; }
+}

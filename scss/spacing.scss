@@ -1,0 +1,9 @@
+@import "./spacing-mixins";
+
+// Базовые отступы
+@include spacing-base;
+
+// Адаптивные отступы для всех брейкпоинтов
+@each $bp in xs, sm, md, lg, xl, "2xl", "3xl" {
+  @include generate-spacing-for-breakpoint($bp);
+}

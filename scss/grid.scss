@@ -1,0 +1,9 @@
+@import "./grid-mixins";
+
+// Базовые стили сетки (включая контейнеры до lg)
+@include grid-base;
+
+// Адаптивные классы для xs, sm, md, lg
+@each $bp in xs, sm, md, lg, xl, "2xl", "3xl" {
+  @include generate-grid-for-breakpoint($bp);
+}
