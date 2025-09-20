@@ -1,0 +1,136 @@
+// === Базовые стили форм ===
+$form-padding-y: 0.5rem;
+$form-padding-x: 1rem;
+$form-font-size: 1rem;
+$form-border-width: 1px;
+$form-border-radius: 4px;
+$form-transition: all 0.2s ease;
+
+// === Цвета состояний ===
+$form-border-color: var(--color-neutral-300);
+$form-border-color-focus: var(--color-primary-500);
+$form-background-color: #ffffff;
+$form-background-color-disabled: var(--color-neutral-50);
+$form-text-color: var(--color-neutral-900);
+$form-text-color-disabled: var(--color-neutral-400);
+$form-placeholder-color: var(--color-neutral-400);
+$form-error-color: var(--color-error-500);
+$form-success-color: var(--color-success-500);
+
+// === Группа полей (метка + поле) ===
+.form-group {
+  margin-bottom: 1rem;
+}
+
+// === Общие стили для всех полей ввода ===
+%form-control-base {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: $form-padding-y $form-padding-x;
+  font-size: $form-font-size;
+  line-height: 1.5;
+  color: $form-text-color;
+  background-color: $form-background-color;
+  background-clip: padding-box;
+  border: $form-border-width solid $form-border-color;
+  border-radius: $form-border-radius;
+  transition: $form-transition;
+
+  &:focus {
+    color: $form-text-color;
+    background-color: $form-background-color;
+    border-color: $form-border-color-focus;
+    outline: 0;
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-500-rgb), 0.2);
+  }
+
+  &:disabled {
+    color: $form-text-color-disabled;
+    background-color: $form-background-color-disabled;
+    border-color: var(--color-neutral-200);
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: $form-placeholder-color;
+    opacity: 1;
+  }
+}
+
+// === Поля ввода ===
+input,
+textarea,
+select {
+  @extend %form-control-base;
+}
+
+// === Кнопки форм ===
+button[type="submit"],
+input[type="submit"] {
+  @extend %form-control-base;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-50);
+    border-color: var(--color-primary-500);
+  }
+}
+
+// === Состояния валидации ===
+input:invalid,
+textarea:invalid,
+select:invalid {
+  border-color: $form-error-color;
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(var(--color-error-500-rgb), 0.2);
+  }
+}
+
+input:valid,
+textarea:valid,
+select:valid {
+  border-color: $form-success-color;
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(var(--color-success-500-rgb), 0.2);
+  }
+}
+
+// === Чекбоксы и радиокнопки — стилизуем отдельно ===
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+// === Метки ===
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: $form-text-color;
+}
+
+// === Подсказки и ошибки ===
+.form-text {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: $form-placeholder-color;
+}
+
+.form-error {
+  color: $form-error-color;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.form-success {
+  color: $form-success-color;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
